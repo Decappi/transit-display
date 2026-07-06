@@ -28,6 +28,14 @@ Pin config in `pin_config.h`.
 - Auto light sleep when idle
 - OTA updates
 
+## Screenshots
+
+| Transit map | Stop tooltip |
+|-------------|--------------|
+| ![Map](images/screenshot-map.png) | ![Tooltip](images/screenshot-tooltip.png) |
+
+Screenshots captured via double-click BOOT button (serial transfer).
+
 ## Project structure
 
 ```
