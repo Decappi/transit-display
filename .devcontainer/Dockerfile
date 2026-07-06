@@ -15,6 +15,7 @@ RUN curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/inst
 ENV PATH="/root/bin:${PATH}"
 
 RUN arduino-cli config init --overwrite && \
+    arduino-cli config set library.enable_unsafe_install true && \
     arduino-cli core update-index \
       --additional-urls "https://espressif.github.io/arduino-esp32/package_esp32_index.json" && \
     arduino-cli core install esp32:esp32 \

@@ -17,8 +17,12 @@
         "python.defaultInterpreterPath": "backend/.venv/bin/python",
         "editor.formatOnSave": true
       }
+    },
+    "jetbrains": {
+      "backend": "PyCharm Professional"
     }
   },
-  "postCreateCommand": "cd backend && uv sync --no-dev 2>/dev/null || echo 'backend deps: skip (cd backend && uv sync)'",
-  "remoteUser": "root"
+  "postCreateCommand": "cd backend && uv sync --no-dev 2>/dev/null || echo 'backend deps: skip'",
+  "remoteUser": "root",
+  "waitFor": "postCreateCommand"
 }
