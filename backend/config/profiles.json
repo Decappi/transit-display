@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "home": {
+      "title": "Prenzlauer Berg",
+      "user_position": {"lat": 52.5219, "lon": 13.4133},
+      "lines": ["U2", "U8", "S1", "S2", "S8", "S85", "S25", "S26", "M1", "M10"],
+      "proximity_radius": 1500
+    }
+  }
+}

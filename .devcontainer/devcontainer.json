@@ -1,0 +1,24 @@
+{
+  "name": "Transit Display ESP32",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.cpptools",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "vsciot-vscode.vscode-arduino",
+        "redhat.vscode-yaml"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "backend/.venv/bin/python",
+        "editor.formatOnSave": true
+      }
+    }
+  },
+  "postCreateCommand": "cd backend && uv sync --no-dev 2>/dev/null || echo 'backend deps: skip (cd backend && uv sync)'",
+  "remoteUser": "root"
+}

@@ -1,0 +1,14 @@
+{
+  "wifi": {
+    "ssid": "YOUR_SSID",
+    "password": "YOUR_PASSWORD"
+  },
+  "transit_display": {
+    "profile": "home",
+    "refresh_sec": 2,
+    "stale_after_sec": 120,
+    "bridge_url": "http://192.168.0.10:8000",
+    "bridge_token": "change-me",
+    "brightness": 80
+  }
+}

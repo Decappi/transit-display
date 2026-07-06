@@ -1,0 +1,83 @@
+version: 3
+
+vars:
+  PROJECT: transit_display
+  FQBN: esp32:esp32:waveshare_esp32_s3_touch_amoled_18:USBMode=hwcdc,CDCOnBoot=cdc,PSRAM=enabled,PartitionScheme=app3M_fat9M_16MB,UploadSpeed=921600
+  DEBUG_PORT: /dev/serial/by-id/REPLACE_WITH_YOUR_PORT
+  READ_PORT: /dev/serial/by-id/REPLACE_WITH_YOUR_PORT
+  MERGED_BIN: build/esp32.esp32.esp32s3/{{.PROJECT}}.ino.merged.bin
+  APP_BIN: build/esp32.esp32.esp32s3/{{.PROJECT}}.ino.bin
+  ESP_IP: "192.168.0.X"
+
+tasks:
+  build:
+    desc: Build firmware
+    cmds:
+      - bash compile.sh
+  flash:
+    desc: Flash firmware via USB
+    cmds:
+      - python3 -m esptool --chip esp32s3 --port {{.DEBUG_PORT}} write-flash 0x0 {{.MERGED_BIN}}
+  flash-monitor:
+    desc: Flash + serial monitor
+    cmds:
+      - task: flash
+      - task: monitor
+  monitor:
+    desc: Serial monitor (GREP=pattern to filter)
+    cmds:
+      - python3 -m serial.tools.miniterm {{.READ_PORT}} 115200 {{if .GREP}}2>&1 | grep --line-buffered "{{.GREP}}"{{end}}
+  ota:
+    desc: OTA upload (build in container first)
+    cmds:
+      - python3 ./espota.py -i {{.ESP_IP}} -p 8266 -f {{.APP_BIN}}
+  ota-monitor:
+    desc: Build + OTA + serial monitor
+    cmds:
+      - task: ota
+      - task: monitor
+  restart:
+    desc: Restart ESP32 via DTR
+    cmds:
+      - python3 -m esptool --chip esp32s3 --port {{.DEBUG_PORT}} run
+  restart-monitor:
+    desc: Restart + serial monitor
+    cmds:
+      - task: restart
+      - task: monitor
+  screenshot:
+    desc: Receive screenshot over serial (double-click BOOT to trigger)
+    cmds:
+      - python3 ./recv_screenshot.py {{.READ_PORT}} {{.CLI_ARGS | default ""}}
+  clean:
+    desc: Remove build artifacts
+    cmds:
+      - rm -rf build/esp32.esp32.esp32s3/
+  backend:
+    desc: Run transit display backend (DEMO_MODE=1)
+    cmds:
+      - cd backend && BRIDGE_TOKEN={{.BRIDGE_TOKEN | default "change-me"}} DEMO_MODE=1 uv run uvicorn transit_display_backend.main:app --host 0.0.0.0 --port 8000
+
+  docker-build:
+    desc: Build backend Docker image
+    dir: backend
+    cmds:
+      - docker compose build
+
+  docker-up:
+    desc: Run backend in Docker container
+    dir: backend
+    cmds:
+      - docker compose up -d
+
+  docker-down:
+    desc: Stop backend Docker container
+    dir: backend
+    cmds:
+      - docker compose down
+
+  docker-logs:
+    desc: Follow backend container logs
+    dir: backend
+    cmds:
+      - docker compose logs -f

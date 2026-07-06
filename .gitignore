@@ -1,0 +1,13 @@
+.superpowers/
+build/
+*.merged.bin
+*.elf
+*.map
+*.d
+.DS_Store
+.venv/
+espota.py
+__pycache__/
+*.egg-info
+.env
+*.bmp

@@ -1,0 +1,9 @@
+services:
+  transit-backend:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      BRIDGE_TOKEN: ${BRIDGE_TOKEN:-change-me}
+    volumes:
+      - ./config:/app/config:ro
